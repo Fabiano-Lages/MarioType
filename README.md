@@ -8,4 +8,4 @@
     Este jogo foi feito acompanhando a aula no canal Chris Courses https://www.youtube.com/watch?v=G5-pt_sjeLo.
 </p>
 
-<img src="./img/thumb.png" />
+<img src="img/thumb.png" />
