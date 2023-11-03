@@ -18,7 +18,8 @@ class Main {
 
 
 const player = new Player();
-const platforms = [
+
+_Platforms.push(
     new Platform({ x : 0, y : engine.height - 35, url : platformImg }),
     new Platform({ x : 399, y : engine.height - 35, url : platformImg }),
     new Platform({ x : 600, y : engine.height - 250, url : platformImg }),
@@ -33,12 +34,9 @@ const platforms = [
     new Platform({ x : 4749, y : engine.height - 450, url : platformImg }),
     new Platform({ x : 5148, y : engine.height - 450, url : platformImg }),
     new Platform({ x : 5547, y : engine.height - 450, url : platformImg }),
-];
+);
 
-const _Inimigos = [];
-const _Particles = [];
-
-_Inimigos.push(
+_Enemys.push(
     new Enemy({x:200, y:engine.height - 85, inicio: 0, fim: 799}),
     new Enemy({x:650, y:engine.height - 300, inicio: 600, fim: 999}),
     new Enemy({x:1300, y:engine.height - 85, inicio: 1200, fim: 1799}),
@@ -51,14 +49,11 @@ _Inimigos.push(
     new Enemy({x:4400, y:engine.height - 500, inicio: 4350, fim: 5946})
 );
 
-const background = new GenericObject({ x : 0, y : 0, url: backgroundImg });
-const genericObjects = [
+_GenericObjects.push(
     new GenericObject( { x: 0, y : 10, url: hillsImg })
-];
+);
 
 const inicio = new Main();
-
-const Tiros = [];
 
 const animate = () => {
     if(!inicio.status) {
@@ -66,11 +61,11 @@ const animate = () => {
 
         engine.ctx.clearRect(0, 0, engine.width, engine.height);
 
-        background.update(engine);
-        genericObjects.forEach(genericObject => genericObject.update(engine));
-        platforms.forEach(platform => platform.update(engine));
+        _Background.update(engine);
+        _GenericObjects.forEach(genericObject => genericObject.update(engine));
+        _Platforms.forEach(platform => platform.update(engine));
         inicio.update(engine);
-        _Inimigos.forEach(inimigo => inimigo.update(engine));
+        _Enemys.forEach(inimigo => inimigo.update(engine, _Platforms));
         _Particles.forEach((particle, p) => {
             if(particle.position.y - particle.radius >= engine.height) {
                 particle.position.x = Math.random() * engine.width;
@@ -86,32 +81,32 @@ const animate = () => {
             }
         });
 
-        player.update(engine, platforms);
+        player.update(engine, _Platforms);
 
         if(keys.fire.pressed && player.tiroHabilitado) {
-            Tiros.push(new Tiro(player));
+            _Shots.push(new Shot(player));
             player.tiroHabilitado = false;
         }
 
-        let achatado = player.verificaAchatamento(_Inimigos);
+        let achatado = player.verificaAchatamento(_Enemys);
         if(achatado > -1) {
-            _Inimigos[achatado].achatado = true;
-            setTimeout(() => {_Inimigos.splice(achatado, 1)}, 50);
+            _Enemys[achatado].achatado = true;
+            setTimeout(() => {_Enemys.splice(achatado, 1)}, 50);
             player.velocity.y = -7;
         }
 
-        Tiros.forEach((tiro, ind) => {
+        _Shots.forEach((tiro, ind) => {
             if(tiro.position.y > engine.height) {
-                Tiros.splice(ind, 1);
+                _Shots.splice(ind, 1);
             } else {
-                let acertado = tiro.acertou(_Inimigos);
+                let acertado = tiro.acertou(_Enemys);
                 if(acertado > -1) {
-                    Tiros.splice(ind, 1);
-                    createParticles({ object: _Inimigos[acertado], colo: "blue", particles: _Particles }, );
-                    _Inimigos[acertado].destruido();
-                    _Inimigos.splice(acertado, 1);
+                    _Shots.splice(ind, 1);
+                    createParticles({ object: _Enemys[acertado], colo: "blue", particles: _Particles }, );
+                    _Enemys[acertado].destruido();
+                    _Enemys.splice(acertado, 1);
                 } else {
-                    tiro.update(engine, player);
+                    tiro.update(engine, player, _Platforms);
                 }
             }
         });
@@ -120,7 +115,7 @@ const animate = () => {
             venceu();
         }
 
-        if((player.position.y > engine.height + player.height) || player.verificaColisao(_Inimigos)) {
+        if((player.position.y > engine.height + player.height) || player.verificaColisao(_Enemys)) {
             perdeu();
             player.position.y = engine.height + player.height;
         }
@@ -155,7 +150,7 @@ const animate = () => {
                 inicio.velocity.x = 0;
             }
 
-            platforms.forEach(platform => {
+            _Platforms.forEach(platform => {
                 if(keys.right.pressed) {
                     platform.velocity.x = -_velocity;
                 } else if(keys.left.pressed) {
@@ -169,7 +164,7 @@ const animate = () => {
                 }
             });
 
-            genericObjects.forEach(genericObject => {
+            _GenericObjects.forEach(genericObject => {
                 if(keys.right.pressed) {
                     genericObject.velocity.x = -_backVelocity;
                 } else if(keys.left.pressed) {

@@ -44,7 +44,7 @@ class Enemy{
         this.spriteController.limpaLoop();
     }
 
-    update(engine) {
+    update(engine, platforms) {
         if(!this.plataforma) {
             platforms.forEach(platform => {
                 if(this.position.x + this.width[this.spriteController.animation] >= platform.position.x && this.position.x <= platform.position.x + platform.width) {

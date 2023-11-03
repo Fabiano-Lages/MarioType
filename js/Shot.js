@@ -1,4 +1,4 @@
-class Tiro {
+class Shot {
     constructor(entity) {
         this.position = {
             x: entity.position.x + (entity.direita ? entity.width[entity.spriteController.animation] - 10 : + 10),
@@ -16,7 +16,7 @@ class Tiro {
         //this.audio = new Audio(audios[2].src);
     }
 
-    update(engine, entity) {
+    update(engine, entity, platforms) {
         this.draw(engine);
         this.position.x += this.velocity.x + (!entity.direita ? -inicio.velocity.x : inicio.velocity.x);
         this.position.y += this.velocity.y;

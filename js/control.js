@@ -3,6 +3,15 @@ const backgroundImg = "./ativo/background.png";
 const hillsImg = "./ativo/hills.png";
 const inimigoImg = "./ativo/inimigo.png";
 const playerImg = "ativo/player.png";
+
+const _Enemys = [];
+const _Particles = [];
+const _Shots = [];
+const _GenericObjects = [];
+const _Platforms = [];
+
+const _Background = new GenericObject({ x : 0, y : 0, url: backgroundImg });
+
 const _gravity = 0.5;
 const _velocity = 5;
 const _jumpVelocity = 15;
