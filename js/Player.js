@@ -34,12 +34,6 @@ class Player{
     }
 
     update(engine, platforms) {
-        if(this.velocity.x + inicio.velocity.x) {
-            this.spriteController.animation = "correndo";
-        } else {
-            this.spriteController.animation = "parado";
-        }
-
         if(this.position.y + this.height + this.velocity.y <= engine.height + (2 * this.height)) {
             if (this.position.y + this.velocity.y < 0) {
                 this.velocity.y = 0;
@@ -65,6 +59,12 @@ class Player{
         this.position.x += this.velocity.x;
 
         this.draw(engine);
+
+        if(this.velocity.x + inicio.velocity.x) {
+            this.spriteController.animation = "correndo";
+        } else {
+            this.spriteController.animation = "parado";
+        }
     }
 
     verificaColisao(inimigos) {

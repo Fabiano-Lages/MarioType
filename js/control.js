@@ -10,7 +10,7 @@ const _Shots = [];
 const _GenericObjects = [];
 const _Platforms = [];
 
-const _Background = new GenericObject({ x : 0, y : 0, url: backgroundImg });
+const _Background = new GenericObject({ x : 0, y : 0, url: backgroundImg, engine });
 
 const _gravity = 0.5;
 const _velocity = 5;

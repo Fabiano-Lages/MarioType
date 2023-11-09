@@ -1,5 +1,5 @@
 class GenericObject {
-    constructor({x, y, url}) {
+    constructor({x, y, url, engine}) {
         this.url = url;
         this.position = {
             x,
@@ -13,14 +13,16 @@ class GenericObject {
         
         this.image = new Image();
 
-        this.load();
-
-        this.width = this.image.width;
-        this.height = this.image.height;
+        this.load(engine);
     }
 
-    async load() {
-        await new Promise(r => this.image.onload = r, this.image.src = this.url);
+    async load(enfine) {
+        this.image.src = this.url;
+        this.image.onload = () => {
+            this.width = this.image.width;
+            this.height = this.image.height;
+            this.draw(engine);
+        };
     }
 
     draw(engine) {
